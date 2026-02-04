@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine 🖤</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  box-sizing:border-box;
+  font-family:"Poppins",sans-serif;
+}
+
+body{
+  margin:0;
+  height:100vh;
+  background:linear-gradient(135deg,#ffd6e8,#fff0f7);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  color:#444;
+}
+
+/* ============ CARD ============ */
+
+.card{
+  background:linear-gradient(145deg,#fff5fa,#ffe3f0);
+  border-radius:35px;
+  width:550px;
+  max-width:92%;
+  padding:50px 40px;
+  text-align:center;
+  position:relative;
+  z-index:5;
+}
+
+/* ============ IMAGE ============ */
+
+.card img{
+  width:170px;
+  margin-bottom:20px;
+}
+
+/* ============ TEXT ============ */
+
+h1{
+  font-size:2.1rem;
+  margin:5px 0 15px;
+  color:#000;
+}
+
+/* ============ BUTTONS ============ */
+
+.buttons{
+  display:flex;
+  justify-content:space-between;
+  margin:45px 0 10px;
+  position:relative;
+  height:60px;
+}
+
+button{
+  border:none;
+  padding:15px 34px;
+  font-size:18px;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.25s;
+}
+
+#yesBtn{
+  background:#ff6fb1;
+  color:white;
+  font-weight:600;
+}
+
+#noBtn{
+  background:white;
+  color:#ff6fb1;
+  border:2px solid #ff6fb1;
+  position:relative;
+  z-index:9999;
+}
+
+/* ============ YES SCREEN ============ */
+
+#yesScreen{
+  display:none;
+  position:relative;
+  overflow:hidden;
+}
+
+#yesScreen h2{
+  color:#000;
+  margin-bottom:20px;
+  font-size:2.3rem;
+}
+
+#yesScreen img{
+  width:190px;
+  margin:20px 0;
+}
+
+#yesScreen p{
+  font-size:1.25rem;
+  line-height:1.7;
+  color:#555;
+}
+
+/* ============ RAIN ============ */
+
+.rain{
+  position:fixed;
+  top:-50px;
+  width:35px;
+  pointer-events:none;
+  opacity:0.8;
+  animation:fall linear infinite;
+  z-index:1;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh);
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ============ MAIN ============ -->
+
+<div class="card" id="main">
+
+  <img src="img1.png">
+
+  <h1>viv, Will you be my Valentine? 🖤</h1>
+
+  <div style="height:10px;"></div>
+
+  <div class="buttons">
+
+    <button id="yesBtn">Yes 😻</button>
+    <button id="noBtn">No 😾</button>
+
+  </div>
+
+</div>
+
+<!-- ============ YES ============ -->
+
+<div class="card" id="yesScreen">
+
+  <img src="img2.png">
+
+  <h2>I love you my kitten 🖤</h2>
+
+  <p>
+    With you, every day feels like Valentine’s Day.<br>
+    I love you more than words can say 🖤
+  </p>
+
+</div>
+
+<!-- ============ MUSIC ============ -->
+
+<audio id="music" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const main = document.getElementById("main");
+const yesScreen = document.getElementById("yesScreen");
+const music = document.getElementById("music");
+
+let scale = 1;
+let isFloating = false;
+
+/* NO RUNS */
+
+noBtn.addEventListener("mouseenter", run);
+noBtn.addEventListener("click", run);
+
+function run(){
+
+  if(!isFloating){
+    noBtn.style.position = "fixed";
+    isFloating = true;
+  }
+
+  const maxX = window.innerWidth - noBtn.offsetWidth;
+  const maxY = window.innerHeight - noBtn.offsetHeight;
+
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+
+  scale += 0.35;
+  yesBtn.style.transform = `scale(${scale})`;
+
+  if(scale > 4){
+    yesBtn.style.position="fixed";
+    yesBtn.style.inset="0";
+    yesBtn.style.borderRadius="0";
+    yesBtn.style.fontSize="44px";
+    yesBtn.style.zIndex="10000";
+
+    noBtn.style.display="none";
+  }
+}
+
+/* RAIN CREATOR */
+
+function createRain(){
+
+  const drop = document.createElement("img");
+  drop.src = "rain.png"; // YOUR PNG HERE
+  drop.classList.add("rain");
+
+  drop.style.left = Math.random() * window.innerWidth + "px";
+  drop.style.animationDuration = 2 + Math.random() * 3 + "s";
+  drop.style.width = 25 + Math.random() * 25 + "px";
+
+  document.body.appendChild(drop);
+
+  setTimeout(()=>{
+    drop.remove();
+  },5000);
+}
+
+/* YES CLICK */
+
+yesBtn.addEventListener("click", ()=>{
+
+  main.style.display="none";
+  yesScreen.style.display="block";
+  music.play();
+
+  // Start raining
+  setInterval(createRain, 200);
+
+});
+
+</script>
+
+</body>
+</html>
