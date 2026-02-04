@@ -33,6 +33,8 @@ body{
   max-width:92%;
   padding:50px 40px;
   text-align:center;
+  position:relative;
+  z-index:5;
 }
 
 /* ============ IMAGE ============ */
@@ -87,6 +89,8 @@ button{
 
 #yesScreen{
   display:none;
+  position:relative;
+  overflow:hidden;
 }
 
 #yesScreen h2{
@@ -106,6 +110,24 @@ button{
   color:#555;
 }
 
+/* ============ RAIN ============ */
+
+.rain{
+  position:fixed;
+  top:-50px;
+  width:35px;
+  pointer-events:none;
+  opacity:0.8;
+  animation:fall linear infinite;
+  z-index:1;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh);
+  }
+}
+
 </style>
 </head>
 
@@ -115,7 +137,6 @@ button{
 
 <div class="card" id="main">
 
-  <!-- First Screen Image -->
   <img src="img1.png">
 
   <h1>viv, Will you be my Valentine? 🖤</h1>
@@ -135,7 +156,6 @@ button{
 
 <div class="card" id="yesScreen">
 
-  <!-- Second Screen Image -->
   <img src="img2.png">
 
   <h2>I love you my kitten 🖤</h2>
@@ -164,7 +184,7 @@ const music = document.getElementById("music");
 let scale = 1;
 let isFloating = false;
 
-/* NO RUNS ANYWHERE */
+/* NO RUNS */
 
 noBtn.addEventListener("mouseenter", run);
 noBtn.addEventListener("click", run);
@@ -185,11 +205,9 @@ function run(){
   noBtn.style.left = x + "px";
   noBtn.style.top = y + "px";
 
-  /* YES grows faster */
   scale += 0.35;
   yesBtn.style.transform = `scale(${scale})`;
 
-  /* FULL SCREEN YES */
   if(scale > 4){
     yesBtn.style.position="fixed";
     yesBtn.style.inset="0";
@@ -201,6 +219,25 @@ function run(){
   }
 }
 
+/* RAIN CREATOR */
+
+function createRain(){
+
+  const drop = document.createElement("img");
+  drop.src = "rain.png"; // YOUR PNG HERE
+  drop.classList.add("rain");
+
+  drop.style.left = Math.random() * window.innerWidth + "px";
+  drop.style.animationDuration = 2 + Math.random() * 3 + "s";
+  drop.style.width = 25 + Math.random() * 25 + "px";
+
+  document.body.appendChild(drop);
+
+  setTimeout(()=>{
+    drop.remove();
+  },5000);
+}
+
 /* YES CLICK */
 
 yesBtn.addEventListener("click", ()=>{
@@ -208,6 +245,9 @@ yesBtn.addEventListener("click", ()=>{
   main.style.display="none";
   yesScreen.style.display="block";
   music.play();
+
+  // Start raining
+  setInterval(createRain, 200);
 
 });
 
